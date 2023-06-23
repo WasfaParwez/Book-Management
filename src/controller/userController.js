@@ -8,48 +8,40 @@ const createUser = async (req, res) => {
   try {
     const Data = req.body;
     const { title, name, phone, email, password, address } = Data;
-
+//==================is Required=============
     if (!title) {
-        return res.status(400).send({ status: false, message: "title is required" })
-    }
+        return res.status(400).send({ status: false, message: "title is required" })}
     if (!name) {
-        return res.status(400).send({ status: false, message: "name is required" })
-    }
+        return res.status(400).send({ status: false, message: "name is required" })}
     if (!phone) {
-        return res.status(400).send({ status: false, message: "phone is required" })
-    }
+        return res.status(400).send({ status: false, message: "phone is required" })}
     if (!email) {
-        return res.status(400).send({ status: false, message: "email is required" })
-    }
+        return res.status(400).send({ status: false, message: "email is required" })}
     if (!password) {
-        return res.status(400).send({ status: false, message: "password is required" })
-    }
+        return res.status(400).send({ status: false, message: "password is required" })}
     if (!address) {
-        return res.status(400).send({ status: false, message: "address is required" })
-    }
+        return res.status(400).send({ status: false, message: "address is required" })}
 
-    // title check
+    //=========title check=====
 
     if(!validator.isValidTitle(title)) {
       return res.status(400).json({ status: false, message: "Invalid title" });
     }
-    // email check
+    //=========email check=======
 
     if (!validator.isValidEmail(email)) {
+     return res.status(400).json({ status: false, message: "Invalid email" });}
 
-     return res.status(400).json({ status: false, message: "Invalid email" });
-    }
-    //password check
+    //=========password check==========
     if (!validator.isValidPassword(password)) {
+    return  res.status(400).json({ status: false, message: "Invalid password" });}
 
-    return  res.status(400).json({ status: false, message: "Invalid password" });
-    }
-    //phone number check
+    //==========number check====
+
     if(!validator.isValid(phone) || !validator.isValidMobileNum(phone)){
+        return res.status(400).send({status: false, message : "Invalid phone number"})}
 
-        return res.status(400).send({status: false, message : "Invalid phone number"})
-    }
-
+    //=========Already Used=============
     const emailUsed = await UserModel.findOne({ email: email });
     if (emailUsed) {
         return res.status(400).json({status: false, message:"email already exists"})
@@ -59,7 +51,7 @@ const createUser = async (req, res) => {
         return res.status(400).json({status: false, message:"phone number already exists"})
     }
         
-//=================================================================================
+//==============================Create User==================
     
     const data = await UserModel.create(Data);
     return res.status(201).json({status: true, message:data})

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const bookModel = require('../model/BookModel');
+const BookModel = require('../model/BookModel');
 
-const Authentication = async function(req, res, next){
+const Authentication = async (req, res, next)=>{
     try{
         const token = req.headers["x-api-key"];
         if(!token){
@@ -13,20 +13,20 @@ const Authentication = async function(req, res, next){
 
     }
     catch(error){
-        if(error.message =="Invalid token"){
+        if(error.message == "Invalid token"){
             return res.status(401).send({status : false, message : "Enter valid token"})
         }
         return res.status(500).send({status : false, message : error.message})
     }
 }
 
-const Authorisation = async function(req,res,next){
+const Authorisation = async (req,res,next)=>{
     try{
         
         let bookId = req.params.bookId
         let userLoggedin = req.decodedToken
        
-        const bookData = await bookModel.findById(bookId)
+        const bookData = await BookModel.findById(bookId)
         const userToBeModified = bookData.userId.toString()
             
         if(userToBeModified!==userLoggedin){
